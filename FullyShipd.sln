@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullyShipd", "FullyShipd.csproj", "{474C72EF-F7D4-489C-A27B-4207A31E0D10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{474C72EF-F7D4-489C-A27B-4207A31E0D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474C72EF-F7D4-489C-A27B-4207A31E0D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474C72EF-F7D4-489C-A27B-4207A31E0D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474C72EF-F7D4-489C-A27B-4207A31E0D10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAC17D6D-4A9C-4BDF-B644-4A77A07C8768}
+	EndGlobalSection
+EndGlobal
