@@ -39,19 +39,19 @@ namespace FullyShipd
             items = new List<InventoryItem>();
         }
 
-        // Add product to Inventory
+        // Add item to Inventory
         public void AddItem(InventoryItem item)
         {
             items.Add(item);
         }
 
-        // Remove product from Inventory
+        // Remove item from Inventory
         public void RemoveItem(string sku)
         {
             for (int i = 0; i < items.Count; i++)
             {
                 if (items[i].SKU == sku)
-                {
+                { 
                     items.RemoveAt(i);
                 }
             }
@@ -69,7 +69,7 @@ namespace FullyShipd
             }
         }
 
-        // Search for item in an order
+        // Search for item in an order to check if there is enough stock
         public bool CheckItemStock (string sku, int requiredStock)
         {
             for(int i = 0; i < items.Count;i++)
@@ -103,6 +103,7 @@ namespace FullyShipd
             }
         }
 
+        // Save to .json
         public void SaveInvToJson(string filePath)
         {
             string jsonString = JsonConvert.SerializeObject(items, Formatting.Indented);
