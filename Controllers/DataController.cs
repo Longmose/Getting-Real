@@ -2,9 +2,10 @@
 
 namespace FullyShipd {
 	public static class DataController {
-		private static string inventoryFilePath = "inventory.json";
-		private static string ordersFilePath = "orders.json";
-		private static string supplierOrdersFilePath = "supplierOrders.json";
+		private static string basePath = AppDomain.CurrentDomain.BaseDirectory;
+		private static string inventoryFilePath = Path.Combine(basePath, "data/inventory.json");
+		private static string ordersFilePath = Path.Combine(basePath, "data/orders.json");
+		private static string supplierOrdersFilePath = Path.Combine(basePath, "data/supplierOrders.json");
 
 		// Tries to load a file and deserialize it with the specified type, returning null if an error occurs
 		private static List<T>? TryLoadFile<T>(string filePath) {
