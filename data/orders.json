@@ -1,0 +1,70 @@
+[
+  {
+    "Id": "0001",
+    "Date": "2024-05-13T19:36:40.786+02:00",
+    "Status": 0,
+    "SupplierOrderId": null,
+    "Items": [
+      {
+        "Sku": "SKU-0001",
+        "Quantity": 1
+      }
+    ]
+  },
+  {
+    "Id": "0002",
+    "Date": "2024-05-13T19:36:40.786+02:00",
+    "Status": 0,
+    "SupplierOrderId": null,
+    "Items": [
+      {
+        "Sku": "SKU-0001",
+        "Quantity": 2
+      },
+      {
+        "Sku": "SKU-0002",
+        "Quantity": 6
+      }
+    ]
+  },
+  {
+    "Id": "0003",
+    "Date": "2024-05-13T19:36:40.786+02:00",
+    "Status": 0,
+    "SupplierOrderId": null,
+    "Items": [
+      {
+        "Sku": "SKU-0003",
+        "Quantity": 3
+      },
+      {
+        "Sku": "SKU-0001",
+        "Quantity": 4
+      }
+    ]
+  },
+  {
+    "Id": "0004",
+    "Date": "2024-05-13T19:36:40.786+02:00",
+    "Status": 0,
+    "SupplierOrderId": null,
+    "Items": [
+      {
+        "Sku": "SKU-0004",
+        "Quantity": 4
+      }
+    ]
+  },
+  {
+    "Id": "0005",
+    "Date": "2024-05-13T19:36:40.786+02:00",
+    "Status": 0,
+    "SupplierOrderId": null,
+    "Items": [
+      {
+        "Sku": "SKU-0005",
+        "Quantity": 5
+      }
+    ]
+  }
+]
