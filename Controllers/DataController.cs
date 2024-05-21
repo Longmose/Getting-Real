@@ -69,6 +69,20 @@ namespace FullyShipd {
 			return TrySaveFile<List<SupplierOrder>>(supplierOrdersFilePath, orders);
 		}
 
+		public static bool UpdateSupplierOrder(SupplierOrder order) {
+			var orders = LoadSupplierOrders();
+			if(orders == null) return false;
+
+			// Make sure the order exists
+			var foundOrder = orders.Find(o => o.Id == order.Id);
+			if(foundOrder == null) return false;
+
+			// Update the order
+			orders[orders.IndexOf(foundOrder)] = order;
+
+			return SaveSupplierOrders(orders);
+		}
+
 		public static bool AddSupplierOrder(SupplierOrder newOrder) {
 			var orders = LoadSupplierOrders();
 			if(orders == null) return false;

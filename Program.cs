@@ -16,7 +16,8 @@
 		private ListView awaitingListView = new ListView();
 		private Button reloadOrdersButton = new Button();
 		private Button reloadSupplierOrdersButton = new Button();
-		private Button processButton = new Button(); // Button to process selected orders
+		private Button processButton = new Button();
+		private Button markDeliveredButton = new Button();
 
 		public MainForm() {
 			InitializeComponents();
@@ -45,7 +46,7 @@
 			// Setup ListViews
 			SetupListView(pendingListView, "Pending", true, false);
 			SetupListView(readyListView, "Ready for production", false, false);
-			SetupListView(supplierOrdersView, "Supplier orders", false, true);
+			SetupListView(supplierOrdersView, "Supplier orders", true, true);
 			SetupListView(awaitingListView, "Awaiting Supplier", false, false);
 
 
@@ -67,6 +68,12 @@
 
 			/* RIGHT SIDE */
 			tableLayoutPanel.Controls.Add(supplierOrdersView, 1, 0);
+
+			markDeliveredButton.Text = "Set as delivered";
+			markDeliveredButton.Dock = DockStyle.Fill;
+			markDeliveredButton.Click += MarkDeliveredButtonSelectedOrders;
+			tableLayoutPanel.Controls.Add(markDeliveredButton, 1, 1);
+
 			tableLayoutPanel.Controls.Add(awaitingListView, 1, 2);
 
 			// Reload supplier orders Button
@@ -80,7 +87,7 @@
 			listView.Dock = DockStyle.Fill;
 			listView.View = View.Details;
 			listView.CheckBoxes = checkBoxes;
-			listView.Columns.Add(headerText, 100, HorizontalAlignment.Left);
+			listView.Columns.Add(headerText, 130, HorizontalAlignment.Left);
 			
 			if(isSupplierOrders) {
 				listView.Columns.Add("Date", 150, HorizontalAlignment.Left);
@@ -154,6 +161,77 @@
 			OrderController.ProcessOrders(orderIds);
 
 			// Reload the orders regardless of the result
+			LoadOrders();
+			LoadSupplierOrders();
+		}
+
+		// Method to mark selected supplier orders as delivered
+		private void MarkDeliveredButtonSelectedOrders(object? sender, EventArgs e) {
+			List<string> orderIds = supplierOrdersView.CheckedItems.Cast<ListViewItem>().Select(item => item.Text).ToList();
+
+			if(orderIds.Count == 0) {
+				MessageBox.Show("Please select at least one order to process.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
+			List<Order> orders = new List<Order>();
+
+			// Validate orders
+			foreach(string orderId in orderIds) {
+				SupplierOrder? order = SupplierOrderController.GetSupplierOrder(orderId);
+				if(order == null) {
+					MessageBox.Show($"Could not find supplier order with ID {orderId}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				if(order.Status != 1) {
+					MessageBox.Show($"Supplier order with ID {orderId} is not ready for delivery.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				// Validate each order id in supplier order
+				foreach(string id in order.OrderIds) {
+					Order? orderItem = OrderController.GetOrder(id);
+					if(orderItem == null) {
+						MessageBox.Show($"Could not find order with ID {id}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					if(orderItem.Status != 1) {
+						MessageBox.Show($"Order with ID {id} is not awaiting supplier delivery.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					// Orders are valid, add to list
+					orders.Add(orderItem);
+				}
+
+				// Orders are valid, add to list
+				supplierOrders.Add(order);
+			}
+
+			// Mark orders as ready for production
+			foreach(Order order in orders) {
+				bool updateResult = OrderController.SetOrderReadyForProduction(order);
+
+				if(!updateResult) {
+					MessageBox.Show($"An error occurred while updating order with ID {order.Id}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+			}
+
+			// Archive supplier orders
+			foreach(SupplierOrder order in supplierOrders) {
+				bool archiveResult = SupplierOrderController.ArchiveOrder(order);
+
+				if(!archiveResult) {
+					MessageBox.Show($"An error occurred while archiving supplier order with ID {order.Id}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+			}
+
+			// Reload the orders
 			LoadOrders();
 			LoadSupplierOrders();
 		}

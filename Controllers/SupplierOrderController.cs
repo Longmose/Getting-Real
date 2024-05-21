@@ -15,6 +15,22 @@ namespace FullyShipd {
 			return DataController.LoadSupplierOrders() ?? new List<SupplierOrder>();
 		}
 
+		public static bool ArchiveOrder(SupplierOrder supplierOrder) {
+			// Check if order is in correct status
+			if(supplierOrder.Status != 1) {
+				Console.WriteLine("Order is not in correct status to be archived.");
+				return false;
+			}
+
+			// Update order status
+			supplierOrder.Status = 2;
+
+			// Update order in database
+			bool updateResult = DataController.UpdateSupplierOrder(supplierOrder);
+
+			return updateResult;
+		}
+
 		public static string? CreateOrder(List<string> orderIds, List<OrderItem> items) {
 			// Simulate a new order being created at the supplier with a 3 hour delivery time
 
@@ -23,16 +39,25 @@ namespace FullyShipd {
 
 			// Fake expected delivery time, 24 hours
 			TimeSpan expectedDeliveryTime = new TimeSpan(24, 0, 0);
+			
+			// Fake set as ready for pickup
+			int status = 1;
 
-			SupplierOrder newOrder = new SupplierOrder(supplierOrderId, DateTime.Now, 0, orderIds, items, expectedDeliveryTime);
+			SupplierOrder newOrder = new SupplierOrder(supplierOrderId, DateTime.Now, status, orderIds, items, expectedDeliveryTime);
 
 			bool createResult = DataController.AddSupplierOrder(newOrder);
 
-			if(!createResult) {
-				return null;
-			}
+			if(!createResult) return null;
 
 			return supplierOrderId;			
+		}
+
+		public static SupplierOrder? GetSupplierOrder(string supplierOrderId) {
+			SupplierOrder? order = GetOrders().Find(o => o.Id == supplierOrderId);
+
+			if(order == null) return null;
+
+			return order;
 		}
 	}
 }

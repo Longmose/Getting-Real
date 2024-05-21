@@ -15,13 +15,15 @@ namespace FullyShipd {
 			return DataController.LoadOrders() ?? new List<Order>();
 		}
 
-		public static bool SetOrderReadyForProduction(Order order) {
-			// Check if order is in correct status
-			if(order.Status != 0) {
-				Console.WriteLine("Order is not in correct status to be set ready for production.");
-				return false;
-			}
+		public static Order? GetOrder(string orderId) {
+			Order? order = GetOrders().Find(o => o.Id == orderId);
 
+			if(order == null) return null;
+
+			return order;
+		}
+
+		public static bool SetOrderReadyForProduction(Order order) {
 			// Update order status
 			order.Status = 2;
 
@@ -123,7 +125,7 @@ namespace FullyShipd {
 				Console.WriteLine($"Order {order.Id} does not contain dropshipped items, setting to ready for production.");
 
 				// Set the order status to ready
-				bool updateResult = OrderController.SetOrderReadyForProduction(order);
+				bool updateResult = SetOrderReadyForProduction(order);
 
 				if(!updateResult) {
 					MessageBox.Show("An error occurred while updating the order status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
