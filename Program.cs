@@ -44,11 +44,10 @@
 			Controls.Add(tableLayoutPanel);
 
 			// Setup ListViews
-			SetupListView(pendingListView, "Pending", true, false);
-			SetupListView(readyListView, "Ready for production", false, false);
-			SetupListView(supplierOrdersView, "Supplier orders", true, true);
-			SetupListView(awaitingListView, "Awaiting Supplier", false, false);
-
+			SetupListView(pendingListView, "Pending", true, false, false);
+			SetupListView(readyListView, "Ready for production", false, false, false);
+			SetupListView(supplierOrdersView, "Supplier orders", true, true, false);
+			SetupListView(awaitingListView, "Awaiting Supplier", false, false, true);
 
 			/* LEFT SIDE */
 			tableLayoutPanel.Controls.Add(pendingListView, 0, 0);
@@ -83,7 +82,7 @@
 			tableLayoutPanel.Controls.Add(reloadSupplierOrdersButton, 1, 3);
 		}
 
-		private void SetupListView(ListView listView, string headerText, bool checkBoxes, bool isSupplierOrders) {
+		private void SetupListView(ListView listView, string headerText, bool checkBoxes, bool isSupplierOrders, bool isAwaitingSupplier = false) {
 			listView.Dock = DockStyle.Fill;
 			listView.View = View.Details;
 			listView.CheckBoxes = checkBoxes;
@@ -97,6 +96,11 @@
 			}
 
 			listView.Columns.Add("Status", 150, HorizontalAlignment.Left);
+
+			if(isAwaitingSupplier) {
+				listView.Columns.Add("Supplier Order ID", 150, HorizontalAlignment.Left);
+			}
+
 			listView.FullRowSelect = false;
 			listView.MultiSelect = false;
 			listView.GridLines = true;
@@ -112,7 +116,8 @@
 				ListViewItem item = new ListViewItem(new[] {
 					order.Id,
 					order.Date.ToString("dd-MM-yyyy, HH:mm"),
-					OrderController.FormatStatus(order.Status)
+					OrderController.FormatStatus(order.Status),
+					order.SupplierOrderId ?? null,
 				}) {
 					Checked = false
 				};
