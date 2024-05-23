@@ -7,7 +7,7 @@
 	},
 	{
 		"Sku": "SKU-0002",
-		"Location": "01-01-2",
+		"Location": "01-01-02",
 		"Stock": 100,
 		"IsDropshipped": false
 	},
